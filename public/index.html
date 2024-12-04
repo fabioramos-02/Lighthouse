@@ -4,69 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análise de Sites</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        input[type="text"], input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .response {
-            margin-top: 20px;
-        }
-
-        .response h2 {
-            color: #333;
-        }
-
-        .response ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .response ul li {
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 5px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -81,65 +20,16 @@
             <button type="submit">Analisar</button>
         </form>
 
-        <div id="result" class="response"></div>
+        <!-- Carregando a animação -->
+        <div id="loader" class="loader"></div>
+
+        <!-- Exibir resultado do gráfico -->
+        <div id="result" class="response" style="display: none;">
+            <h2>Resultado da Análise</h2>
+            <canvas id="resultChart" width="400" height="200"></canvas>
+        </div>
     </div>
 
-    <script>
-        document.getElementById('siteForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const urlInput = document.getElementById('url').value;
-            const csvInput = document.getElementById('csv').files[0];
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = ''; // Limpa o resultado anterior
-
-            let formData = new FormData();
-            if (urlInput) {
-                formData.append('url', urlInput);
-                // Envia a URL diretamente
-                const response = await fetch('/api/avaliar?url=' + encodeURIComponent(urlInput));
-                const data = await response.json();
-                displayResults(data);
-            } else if (csvInput) {
-                formData.append('csv', csvInput);
-                // Processar o CSV
-                const reader = new FileReader();
-                reader.onload = async function(event) {
-                    const csvText = event.target.result;
-                    const urls = csvText.split('\n').map(line => line.split(',')[1].trim()); // Considerando que o CSV tem o formato "Nome, URL"
-                    let results = [];
-                    for (let url of urls) {
-                        const response = await fetch(`/api/avaliar?url=${encodeURIComponent(url)}`);
-                        const data = await response.json();
-                        results.push({ url, ...data });
-                    }
-                    displayResults(results);
-                };
-                reader.readAsText(csvInput);
-            }
-
-            function displayResults(results) {
-                if (Array.isArray(results)) {
-                    results.forEach(result => {
-                        let ul = `<ul>`;
-                        for (const siteResult of result.conteudo) {
-                            ul += `<li><strong>${siteResult.url}</strong>: Performance: ${siteResult.performance}, Acessibilidade: ${siteResult.accessibility}, SEO: ${siteResult.seo}</li>`;
-                        }
-                        ul += `</ul>`;
-                        resultDiv.innerHTML = ul;
-                    });
-                } else {
-                    resultDiv.innerHTML = `
-                        <h2>Resultado da Análise</h2>
-                        <ul>
-                            <li><strong>Performance:</strong> ${results.conteudo.performance}</li>
-                            <li><strong>Acessibilidade:</strong> ${results.conteudo.accessibility}</li>
-                            <li><strong>SEO:</strong> ${results.conteudo.seo}</li>
-                        </ul>
-                    `;
-                }
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
