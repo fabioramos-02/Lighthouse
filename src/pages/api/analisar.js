@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   try {
     // Executa o Unlighthouse CLI com o arquivo de configuração
-    const command = `unlighthouse-ci --site ${siteUrl} --config-file unlighthouse.config.ts --reporter json`;
+    const command = `unlighthouse-ci --site ${siteUrl} --config-file unlighthouse.config.ts --output json`;
     const { stdout, stderr } = await execPromise(command);
 
     if (stderr) {
