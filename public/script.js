@@ -1,5 +1,3 @@
-
-
 document
   .getElementById("siteForm")
   .addEventListener("submit", async function (e) {
@@ -52,51 +50,56 @@ document
   });
 // Defina a função displayResults no escopo global
 function displayResults(results) {
-    const loader = document.getElementById("loader");
-    const resultDiv = document.getElementById("result");
-    const ctx = document.getElementById("resultChart").getContext("2d");
-  
-    loader.style.display = "none"; // Esconde a animação de carregamento
-    resultDiv.style.display = "block"; // Exibe o gráfico de resultados
-  
-    let labels = ["Performance", "Acessibilidade", "SEO"];
-    let data = {
-      labels: labels,
-      datasets: [], // Certifique-se de que datasets é inicializado corretamente
-    };
-  
-    if (Array.isArray(results)) {
-      results.forEach((result) => {
-        const { performance, accessibility, seo } = result.conteudo;
-        data.datasets.push({
-          label: result.url,
-          data: [performance, accessibility, seo],
-          backgroundColor: ["#3498db", "#2ecc71", "#e74c3c"],
-          borderColor: ["#2980b9", "#27ae60", "#c0392b"],
-          borderWidth: 1,
-        });
-      });
-    } else {
-      const { performance, accessibility, seo } = results.conteudo;
+  const loader = document.getElementById("loader");
+  const resultDiv = document.getElementById("result");
+  const ctx = document.getElementById("resultChart").getContext("2d");
+
+  loader.style.display = "none"; // Esconde a animação de carregamento
+  resultDiv.style.display = "block"; // Exibe o gráfico de resultados
+
+  // Verifica se já existe um gráfico no canvas e o destrói
+  if (window.myChart) {
+    window.myChart.destroy();
+  }
+
+  let labels = ["Performance", "Acessibilidade", "SEO"];
+  let data = {
+    labels: labels,
+    datasets: [], // Certifique-se de que datasets é inicializado corretamente
+  };
+
+  if (Array.isArray(results)) {
+    results.forEach((result) => {
+      const { performance, accessibility, seo } = result.conteudo;
       data.datasets.push({
-        label: "Resultado",
+        label: result.url,
         data: [performance, accessibility, seo],
         backgroundColor: ["#3498db", "#2ecc71", "#e74c3c"],
         borderColor: ["#2980b9", "#27ae60", "#c0392b"],
         borderWidth: 1,
       });
-    }
-  
-    new Chart(ctx, {
-      type: "bar",
-      data: data,
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
+    });
+  } else {
+    const { performance, accessibility, seo } = results.conteudo;
+    data.datasets.push({
+      label: "Resultado",
+      data: [performance, accessibility, seo],
+      backgroundColor: ["#3498db", "#2ecc71", "#e74c3c"],
+      borderColor: ["#2980b9", "#27ae60", "#c0392b"],
+      borderWidth: 1,
     });
   }
+
+  window.myChart = new Chart(ctx, {
+    type: "bar",
+    data: data,
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
