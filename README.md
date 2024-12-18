@@ -38,6 +38,7 @@ Este projeto utiliza o **Unlighthouse** para gerar relatórios de performance e 
     ```bash
     npm install -g @unlighthouse/cli
 4. **⚙️ Estrutura do Projeto**
+    ```
     Lighthouse/
     ├── .next/                     # Arquivos compilados do Next.js
     ├── .unlighthouse/             # Configurações locais do Unlighthouse
