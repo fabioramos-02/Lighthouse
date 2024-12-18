@@ -51,7 +51,7 @@ Este projeto utiliza o **Unlighthouse** para gerar relatórios de performance e 
    ├── .unlighthouse/             # Configurações locais do Unlighthouse
    ├── node_modules/              # Dependências do projeto
    ├── reports/                   # Pasta onde os relatórios gerados são salvos
-   │   └── resultado.json/        # Resultados e relatórios em JSON
+   │   └── ci-result.json/        # Resultados e relatórios em JSON
    ├── src/                       # Código-fonte principal
    │   └── pages/
    │       └── api/
