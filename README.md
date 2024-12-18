@@ -27,8 +27,8 @@ Este projeto utiliza o **Unlighthouse** para gerar relatórios de performance e 
 
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/seu-usuario/nome-do-repo.git
-   cd nome-do-repo
+   git clone https://github.com/fabioramos-02/Lighthouse
+   cd Lighthouse
 
 2. **Instale as dependências:**
     ```bash
@@ -37,5 +37,7 @@ Este projeto utiliza o **Unlighthouse** para gerar relatórios de performance e 
 3. **Instale Instale o Unlighthouse (globalmente):**
     ```
     npm install -g @unlighthouse/cli
+4. **Estrutura do Projeto:**
+
 
 
