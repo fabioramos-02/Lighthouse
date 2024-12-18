@@ -3,4 +3,5 @@
 /.unlighthouse
 /reports
 .env.local
+# ignorar arquivo unlighthouse.config.temp.ts
 unlighthouse.config.temp.ts
