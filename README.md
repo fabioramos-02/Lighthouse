@@ -75,7 +75,9 @@ Este projeto utiliza o **Unlighthouse** para gerar relatórios de performance e 
     GET http://localhost:3000/api/analisar?siteUrl=https://mscultural.ms.gov.br&device=mobile
 
 
-
+## **👨‍💻 Autor**
+    Desenvolvido por Fabio Ramos.
+    Entre em contato: framos@segov.ms.gov.br
 
 
 
