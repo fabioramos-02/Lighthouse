@@ -11,6 +11,10 @@
   "author": "Fabio Ramos",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.2.1",
+    "@mui/material": "^6.2.1",
     "@unlighthouse/cli": "^0.14.1",
     "chrome-launcher": "^1.1.2",
     "cors": "^2.8.5",
