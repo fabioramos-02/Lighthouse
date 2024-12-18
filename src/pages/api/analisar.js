@@ -18,28 +18,32 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Parâmetro "siteUrl" é obrigatório' });
   }
 
+  // Define o diretório base de saída
   const baseOutputDir = path.resolve(process.cwd(), "reports");
+  // Define o caminho do arquivo temporário de configuração
   const tempConfigPath = path.resolve("unlighthouse.config.temp.ts");
-  const resultDir = path.join(baseOutputDir, "resultado.json", "reports");
-  const jsonFilePath = path.join(resultDir, "lighthouse.json");
+  // Define o caminho do arquivo JSON de saída
+  const jsonFilePath = path.join(baseOutputDir, "ci-result.json");
 
   try {
-    // Cria o diretório de saída, se não existir
-    await fsExtra.ensureDir(resultDir);
 
     // Obtemos a configuração dinâmica com a URL e o dispositivo
     const config = getConfig(siteUrl, device);
 
     // Escreve a configuração no arquivo temporário
-    const configContent = `module.exports = ${JSON.stringify(config, null, 2)};`;
+    const configContent = `module.exports = ${JSON.stringify(
+      config,
+      null,
+      2
+    )};`;
     await fs.writeFile(tempConfigPath, configContent, "utf-8");
 
     // Comando para executar o Unlighthouse
     const command = `npx unlighthouse-ci \
-      --config-file ${tempConfigPath} \
-      --urls / \
-      --reporter json \
-      --output-path ${baseOutputDir}/resultado.json`;
+  --config-file ${tempConfigPath} \
+  --urls / \
+  --reporter json \
+  --output-path ${baseOutputDir}`;
 
     console.log(`Executando comando: ${command}`);
 

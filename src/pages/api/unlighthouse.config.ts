@@ -2,12 +2,12 @@ module.exports = (siteUrl: any, device: any) => {
   return {
     ci: {
       reporter: "json", // Remova os colchetes e passe como string simples
-      outputPath: "./reports/resultado.json", // Caminho do arquivo de saída
+      outputPath: "./reports", // Agora é um diretório
     },
     site: siteUrl, // URL do site recebida dinamicamente
     debug: true, // Habilita logs de depuração
     scanner: {
-      device: device === 'mobile' ? 'mobile' : 'desktop',  // Alinhar as configurações do dispositivo
+      device: device === "mobile" ? "mobile" : "desktop", // Alinhar as configurações do dispositivo
     },
     includeUrls: [
       "^/$", // Apenas a página principal (índice)
