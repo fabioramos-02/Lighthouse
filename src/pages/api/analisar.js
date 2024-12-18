@@ -2,7 +2,6 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
-import fsExtra from "fs-extra"; // Certifique-se de que fs-extra está instalado
 import getConfig from "./unlighthouse.config";
 
 const execPromise = promisify(exec);
