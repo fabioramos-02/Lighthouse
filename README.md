@@ -79,6 +79,7 @@ Este projeto utiliza o **Unlighthouse** para gerar relatórios de performance e 
 ## **👨‍💻 Autor**
     Desenvolvido por Fabio Ramos.
     Entre em contato: framos@segov.ms.gov.br
+    Linkedin https://www.linkedin.com/in/fabio-ramos-7b8608204/
 
 
 
