@@ -3,3 +3,4 @@
 /.unlighthouse
 /reports
 .env.local
+unlighthouse.config.temp.ts
