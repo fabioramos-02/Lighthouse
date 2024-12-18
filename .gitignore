@@ -2,3 +2,4 @@
 /.next
 /.unlighthouse
 /reports
+.env.local
