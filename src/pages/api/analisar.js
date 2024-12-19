@@ -80,7 +80,14 @@ export default async function handler(req, res) {
     );
 
     // Salvar o arquivo JSON no banco de dados
-    const jsonReport = await fs.readFile(jsonReportPath, "utf-8");
+    let jsonReport = null;
+
+    try {
+      const jsonReportPath = path.join(baseOutputDir, "lighthouse.json");
+      jsonReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
+    } catch (err) {
+      console.error("Erro ao ler o arquivo JSON:", err.message);
+    }
 
     // Salvar no banco de dados utilizando a função modularizada
     const savedAnalysis = await saveAnalysisToDB({
@@ -90,7 +97,7 @@ export default async function handler(req, res) {
       accessibility,
       bestPractices,
       seo,
-      arquivoJson: jsonReport,
+      rawReport: jsonReport,
     });
 
     return res.status(200).json({
