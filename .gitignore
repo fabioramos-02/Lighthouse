@@ -2,6 +2,6 @@
 /.next
 /.unlighthouse
 /reports
-.env.local
+.env
 # ignorar arquivo unlighthouse.config.temp.ts
 unlighthouse.config.temp.ts
