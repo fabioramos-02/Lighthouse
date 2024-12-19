@@ -1,8 +1,10 @@
+// pages/api/analisar.js
 import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
 import getConfig from "./unlighthouse.config";
+import { saveAnalysisToDB } from "../../lib/saveAnalysis";
 
 const execPromise = promisify(exec);
 
@@ -25,7 +27,6 @@ export default async function handler(req, res) {
   const jsonFilePath = path.join(baseOutputDir, "ci-result.json");
 
   try {
-
     // Obtemos a configuração dinâmica com a URL e o dispositivo
     const config = getConfig(siteUrl, device);
 
@@ -59,9 +60,32 @@ export default async function handler(req, res) {
     // Remove o arquivo de configuração temporário
     await fs.unlink(tempConfigPath);
 
+    // Em vez de const analysis = result.data[0]; use:
+    const analysis = result[0];
+
+    // Agora você pode extrair as propriedades normalmente
+    const {
+      score,
+      performance,
+      accessibility,
+      "best-practices": bestPractices,
+      seo,
+    } = analysis;
+    
+
+    // Salvar no banco de dados utilizando a função modularizada
+    const savedAnalysis = await saveAnalysisToDB({
+      siteUrl,
+      score,
+      performance,
+      accessibility,
+      bestPractices,
+      seo
+    });
+
     return res.status(200).json({
-      message: "Relatório gerado com sucesso",
-      data: result,
+      message: "Relatório gerado e salvo com sucesso",
+      data: savedAnalysis,
     });
   } catch (error) {
     console.error("Erro:", error);
