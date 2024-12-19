@@ -83,7 +83,7 @@ export default async function handler(req, res) {
     let jsonReport = null;
 
     try {
-      const jsonReportPath = path.join(baseOutputDir, "lighthouse.json");
+      const jsonReportPath = path.join(baseOutputDir,"reports",  "lighthouse.json");
       jsonReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
     } catch (err) {
       console.error("Erro ao ler o arquivo JSON:", err.message);
