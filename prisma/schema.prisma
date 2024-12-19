@@ -22,4 +22,5 @@ model SiteAnalysis {
   bestPractices  Float
   seo            Float
   dataAnalise    DateTime @default(now())
+  rawReport      Json?     // Novo campo para armazenar o relatório bruto
 }

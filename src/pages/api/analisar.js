@@ -71,7 +71,16 @@ export default async function handler(req, res) {
       "best-practices": bestPractices,
       seo,
     } = analysis;
-    
+
+    // Adicionado para salvar o relatório JSON no diretorio reports\reports\lighthouse.json
+    const jsonReportPath = path.join(
+      baseOutputDir,
+      "reports",
+      "lighthouse.json"
+    );
+
+    // Salvar o arquivo JSON no banco de dados
+    const jsonReport = await fs.readFile(jsonReportPath, "utf-8");
 
     // Salvar no banco de dados utilizando a função modularizada
     const savedAnalysis = await saveAnalysisToDB({
@@ -80,7 +89,8 @@ export default async function handler(req, res) {
       performance,
       accessibility,
       bestPractices,
-      seo
+      seo,
+      arquivoJson: jsonReport,
     });
 
     return res.status(200).json({
