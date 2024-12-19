@@ -21,9 +21,7 @@ export default async function handler(req, res) {
 
   // Define o diretório base de saída
   const baseOutputDir = path.resolve(process.cwd(), "reports");
-  // Define o caminho do arquivo temporário de configuração
   const tempConfigPath = path.resolve("unlighthouse.config.temp.ts");
-  // Define o caminho do arquivo JSON de saída
   const jsonFilePath = path.join(baseOutputDir, "ci-result.json");
 
   try {
@@ -40,10 +38,10 @@ export default async function handler(req, res) {
 
     // Comando para executar o Unlighthouse
     const command = `npx unlighthouse-ci \
-  --config-file ${tempConfigPath} \
-  --urls / \
-  --reporter json \
-  --output-path ${baseOutputDir}`;
+      --config-file ${tempConfigPath} \
+      --urls / \
+      --reporter json \
+      --output-path ${baseOutputDir}`;
 
     console.log(`Executando comando: ${command}`);
 
@@ -60,10 +58,8 @@ export default async function handler(req, res) {
     // Remove o arquivo de configuração temporário
     await fs.unlink(tempConfigPath);
 
-    // Em vez de const analysis = result.data[0]; use:
+    // Extrai os dados da análise
     const analysis = result[0];
-
-    // Agora você pode extrair as propriedades normalmente
     const {
       score,
       performance,
@@ -72,23 +68,19 @@ export default async function handler(req, res) {
       seo,
     } = analysis;
 
-    // Adicionado para salvar o relatório JSON no diretorio reports\reports\lighthouse.json
-    const jsonReportPath = path.join(
-      baseOutputDir,
-      "reports",
-      "lighthouse.json"
-    );
-
-    // Salvar o arquivo JSON no banco de dados
+    // Caminho do arquivo JSON gerado
     let jsonReport = null;
-
     try {
-      const jsonReportPath = path.join(baseOutputDir,"reports",  "lighthouse.json");
+      const jsonReportPath = path.join(
+        baseOutputDir,
+        "reports",
+        "lighthouse.json"
+      );
+
       jsonReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
     } catch (err) {
-      console.error("Erro ao ler o arquivo JSON:", err.message);
+      jsonReport = null; // Define como nulo em caso de erro
     }
-
     // Salvar no banco de dados utilizando a função modularizada
     const savedAnalysis = await saveAnalysisToDB({
       siteUrl,
@@ -97,7 +89,7 @@ export default async function handler(req, res) {
       accessibility,
       bestPractices,
       seo,
-      rawReport: jsonReport,
+      jsonReport,
     });
 
     return res.status(200).json({

@@ -9,7 +9,7 @@ export async function saveAnalysisToDB(analysisData) {
     accessibility,
     bestPractices,
     seo,
-    arquivoJson, // Adicionado para salvar o relatório JSON
+    jsonReport, // Adicionado para salvar o relatório JSON
   } = analysisData;
 
   const savedAnalysis = await prisma.siteAnalysis.create({
@@ -21,7 +21,7 @@ export async function saveAnalysisToDB(analysisData) {
       bestPractices,
       seo,
       dataAnalise: new Date(),
-      rawReport: arquivoJson, // Salva o relatório JSON no campo rawReport
+      rawReport: jsonReport || null, // Garante que será nulo se não houver conteúdo
     },
   });
 
