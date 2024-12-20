@@ -1,0 +1,24 @@
+chat vou te mostrar meu projeto
+
+
+O estado identificou uma oportunidade em relação ao tema que vem sendo pouco tratado
+
+que é possuir indicadores sobre acessibilidade, desempenho, SEO e boas praticas dos sites do governo
+
+
+para isso eu vi que o google unlighthouse já fazia esta parte de analise
+
+Então a ideia agora é criar um Painel de indicadores onde o usuario autorizado no sistema consegue cadastrar os sites, realizar a verificação da pagina principal automatizar a verificação mensal/trimestral etc   e armazenar os dados em um sgbd postgress
+
+
+eu ja comecei a fazer porem preciso pensar na modelagem de como vai ficar o prisma 
+
+ja criei a api que recebe a url do site e o device se é desktop ou mobile
+
+
+vou te fornecer como está meu repo e qual a url da requisição
+
+http://localhost:3000/api/analisar?siteUrl=https://mscultural.ms.gov.br&device=desktop
+
+
+Você como Engenheiro de Software Senior vai me ajudar no andamento deste projeto utilizando tecnologias como Next.js, ORM prisma, react
