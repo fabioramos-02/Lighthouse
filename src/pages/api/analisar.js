@@ -71,7 +71,8 @@ export default async function handler(req, res) {
 
     // Caminho do arquivo JSON gerado
     let rawReport = null;
-    let relatorioTraduzido = null;
+    // let relatorioTraduzido = null;
+
     try {
       const jsonReportPath = path.join(
         baseOutputDir,
@@ -82,33 +83,49 @@ export default async function handler(req, res) {
       // Lê o relatório bruto
       rawReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
 
-      try {
-        relatorioTraduzido = await translate(rawReport, "pt", "en");
-        console.log("Relatório traduzido:", relatorioTraduzido);
-      } catch (err) {
-        console.error("Erro ao traduzir o JSON:", err);
-        relatorioTraduzido = null;
-      }
+      // // Tenta traduzir o relatório bruto
+      // try {
+      //   relatorioTraduzido = await translate(
+      //     JSON.stringify(rawReport, null, 2),
+      //     "pt",
+      //     "en"
+      //   );
+      //   console.log("Relatório traduzido com sucesso.");
+      // } catch (err) {
+      //   console.error("Erro ao traduzir o JSON:", err);
+      //   relatorioTraduzido = null; // Define como nulo em caso de erro
+      // }
     } catch (err) {
       console.error("Erro ao ler o relatório bruto:", err);
       rawReport = null; // Define como nulo em caso de erro
     }
 
-    // Salvar no banco de dados utilizando a função modularizada
-    const savedAnalysis = await saveAnalysisToDB({
-      siteUrl,
-      score,
-      performance,
-      accessibility,
-      bestPractices,
-      seo,
-      rawReport, // Relatório bruto
-      relatorioTraduzido, // Relatório traduzido
-    });
+    // Validação antes de salvar no banco
+    if (rawReport === null) {
+      console.error("Relatório bruto não encontrado. Abortando salvamento.");
+    } else {
+      try {
+        // Salvar no banco de dados utilizando a função modularizada
+        const savedAnalysis = await saveAnalysisToDB({
+          siteUrl,
+          score,
+          performance,
+          accessibility,
+          bestPractices,
+          seo,
+          rawReport, // Relatório bruto
+          // relatorioTraduzido, // Relatório traduzido
+        });
+
+        console.log("Análise salva com sucesso no banco de dados:");
+      } catch (err) {
+        console.error("Erro ao salvar a análise no banco de dados:", err);
+      }
+    }
 
     return res.status(200).json({
       message: "Relatório gerado e salvo com sucesso",
-      data: savedAnalysis,
+      data: saveAnalysisToDB,
     });
   } catch (error) {
     console.error("Erro:", error);

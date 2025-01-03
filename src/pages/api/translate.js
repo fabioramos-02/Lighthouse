@@ -12,11 +12,14 @@ import fetch from "node-fetch"; // Certifique-se de que "node-fetch" está insta
 export async function translate(text, targetLang, sourceLang = "auto", format = "text", alternatives = 1) {
   const url = "http://127.0.0.1:5000/translate";
 
+  // Certifique-se de que 'text' seja uma string
+  const stringifiedText = typeof text === "string" ? text : JSON.stringify(text);
+
   try {
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        q: text,
+        q: stringifiedText,
         source: sourceLang,
         target: targetLang,
         format: format,
