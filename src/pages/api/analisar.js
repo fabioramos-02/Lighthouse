@@ -112,15 +112,7 @@ export default async function handler(req, res) {
       console.error("Erro ao ler o relatório bruto:", err);
       rawReport = null; // Define como nulo em caso de erro
     }
-    console.log("Dados extraídos da análise:", {
-      siteUrl,
-      score,
-      performance,
-      accessibility,
-      bestPractices,
-      seo,
-      rawReport,
-    });
+    
     // Salvar no banco de dados utilizando a função modularizada
     const savedAnalysis = await saveAnalysisToDB({
       siteUrl,

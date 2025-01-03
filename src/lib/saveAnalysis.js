@@ -53,7 +53,7 @@ export async function saveAnalysisToDB(analysisData) {
     },
   });
 
-  console.log("Análise salva no banco de dados:", savedAnalysis);
+  // console.log("Análise salva no banco de dados:", savedAnalysis);
 
   return savedAnalysis;
 }

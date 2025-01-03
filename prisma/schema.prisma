@@ -23,9 +23,9 @@ model SiteAnalysis {
   accessibility     Float
   bestPractices     Float
   seo               Float
+  dataAnalise       DateTime @default(now())
   rawReport         Json?  // Relatório bruto
   relatorioTraduzido Json? // Relatório traduzido
-  dataAnalise       DateTime @default(now())
 }
 
 
