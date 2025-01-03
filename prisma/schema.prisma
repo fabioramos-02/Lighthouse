@@ -23,4 +23,5 @@ model SiteAnalysis {
   seo            Float
   dataAnalise    DateTime @default(now())
   rawReport      Json?     // Novo campo para armazenar o relatório bruto
+  relatorioTraduzido Json? // Novo campo para armazenar o relatório traduzido
 }

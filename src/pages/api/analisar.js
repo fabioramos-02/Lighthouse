@@ -3,8 +3,9 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
-import getConfig from "./unlighthouse.config";
+import getConfig from "../../pages/api/unlighthouse.config";
 import { saveAnalysisToDB } from "../../lib/saveAnalysis";
+import { translate } from "./translate"; // Importa a função de tradução
 
 const execPromise = promisify(exec);
 
@@ -69,7 +70,8 @@ export default async function handler(req, res) {
     } = analysis;
 
     // Caminho do arquivo JSON gerado
-    let jsonReport = null;
+    let rawReport = null;
+    let relatorioTraduzido = null;
     try {
       const jsonReportPath = path.join(
         baseOutputDir,
@@ -77,10 +79,21 @@ export default async function handler(req, res) {
         "lighthouse.json"
       );
 
-      jsonReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
+      // Lê o relatório bruto
+      rawReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
+
+      try {
+        relatorioTraduzido = await translate(rawReport, "pt", "en");
+        console.log("Relatório traduzido:", relatorioTraduzido);
+      } catch (err) {
+        console.error("Erro ao traduzir o JSON:", err);
+        relatorioTraduzido = null;
+      }
     } catch (err) {
-      jsonReport = null; // Define como nulo em caso de erro
+      console.error("Erro ao ler o relatório bruto:", err);
+      rawReport = null; // Define como nulo em caso de erro
     }
+
     // Salvar no banco de dados utilizando a função modularizada
     const savedAnalysis = await saveAnalysisToDB({
       siteUrl,
@@ -89,7 +102,8 @@ export default async function handler(req, res) {
       accessibility,
       bestPractices,
       seo,
-      jsonReport,
+      rawReport, // Relatório bruto
+      relatorioTraduzido, // Relatório traduzido
     });
 
     return res.status(200).json({
