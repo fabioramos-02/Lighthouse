@@ -12,16 +12,7 @@ export async function saveAnalysisToDB(analysisData) {
     relatorioTraduzido,
   } = analysisData;
 
-  console.log("Preparando para salvar análise:", {
-    siteUrl,
-    score,
-    performance,
-    accessibility,
-    bestPractices,
-    seo,
-    rawReport,
-    relatorioTraduzido,
-  });
+
 
   // Busca ou cria o site no banco de dados
   const site = await prisma.site.upsert({
@@ -35,7 +26,7 @@ export async function saveAnalysisToDB(analysisData) {
     },
   });
 
-  console.log("Site encontrado ou criado:", site);
+  // console.log("Site encontrado ou criado:", site);
 
   // Salva a análise associada ao site
   const savedAnalysis = await prisma.siteAnalysis.create({

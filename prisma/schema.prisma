@@ -14,26 +14,39 @@ generator client {
 }
 
 model SiteAnalysis {
-  id                Int    @id @default(autoincrement())
-  siteId            Int
-  site              Site   @relation(fields: [siteId], references: [id])
-  siteUrl           String
-  score             Float
-  performance       Float
-  accessibility     Float
-  bestPractices     Float
-  seo               Float
-  dataAnalise       DateTime @default(now())
-  rawReport         Json?  // Relatório bruto
-  relatorioTraduzido Json? // Relatório traduzido
+  id                 Int      @id @default(autoincrement())
+  siteId             Int
+  site               Site     @relation(fields: [siteId], references: [id])
+  usuarioId          Int?
+  usuario            Usuario? @relation(fields: [usuarioId], references: [id])
+  siteUrl            String
+  score              Float
+  performance        Float
+  accessibility      Float
+  bestPractices      Float
+  seo                Float
+  rawReport          Json?
+  relatorioTraduzido Json?
+  dataAnalise        DateTime @default(now())
 }
 
+model Usuario {
+  id           Int            @id @default(autoincrement())
+  nome         String
+  email        String         @unique
+  senha        String
+  ativo        Boolean        @default(true)
+  role         String         @default("user") // Valores: 'admin' ou 'user'
+  criadoEm     DateTime       @default(now())
+  atualizadoEm DateTime       @updatedAt
+  analises     SiteAnalysis[] // Relacionamento com SiteAnalysis
+}
 
 model Site {
-  id       Int      @id @default(autoincrement())
+  id       Int            @id @default(autoincrement())
   nome     String
-  url      String   @unique
+  url      String         @unique
   orgao    String
-  ativo    Boolean  @default(true)
+  ativo    Boolean        @default(true)
   analises SiteAnalysis[]
 }
