@@ -71,7 +71,7 @@ export default async function handler(req, res) {
 
     // Caminho do arquivo JSON gerado
     let rawReport = null;
-    // let relatorioTraduzido = null;
+    let relatorioTraduzido = null;
 
     try {
       const jsonReportPath = path.join(
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
 
       // Lê o relatório bruto
       rawReport = JSON.parse(await fs.readFile(jsonReportPath, "utf-8"));
-
+      
       // // Tenta traduzir o relatório bruto
       // try {
       //   relatorioTraduzido = await translate(
@@ -114,7 +114,7 @@ export default async function handler(req, res) {
           bestPractices,
           seo,
           rawReport, // Relatório bruto
-          // relatorioTraduzido, // Relatório traduzido
+          relatorioTraduzido, // Relatório traduzido
         });
 
         console.log("Análise salva com sucesso no banco de dados:");

@@ -14,14 +14,28 @@ generator client {
 }
 
 model SiteAnalysis {
-  id             Int      @id @default(autoincrement())
-  siteUrl        String
-  score          Float
-  performance    Float
-  accessibility  Float
-  bestPractices  Float
-  seo            Float
-  dataAnalise    DateTime @default(now())
-  rawReport      Json?     // Novo campo para armazenar o relatório bruto
-  relatorioTraduzido Json? // Novo campo para armazenar o relatório traduzido
+  id                Int    @id @default(autoincrement()) // Identificador único da análise
+  score             Float  // Nota geral
+  performance       Float  // Nota de desempenho
+  accessibility     Float  // Nota de acessibilidade
+  bestPractices     Float  // Nota de boas práticas
+  seo               Float  // Nota de SEO
+  dataAnalise       DateTime @default(now()) // Data da análise
+  rawReport         Json?  // Relatório bruto
+  relatorioTraduzido Json? // Relatório traduzido (opcional)
+
+  // Chave estrangeira para relacionamento com a tabela 'sites'
+  siteId            Int    // ID do site relacionado
+  site              Site   @relation(fields: [siteId], references: [id]) // Relacionamento com 'Site'
+}
+
+model Site {
+  id       Int      @id @default(autoincrement()) // Identificador único
+  nome     String   // Nome do site
+  url      String   // URL do site
+  orgao    String   // Órgão responsável pelo site
+  ativo    Boolean  @default(true) // Indica se o site está ativo ou não
+
+  // Relacionamento com a tabela de análises
+  analises SiteAnalysis[] // Um site pode ter várias análises
 }
