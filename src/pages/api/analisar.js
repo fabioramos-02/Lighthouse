@@ -1,4 +1,5 @@
 // pages/api/analisar.js
+import { PrismaClient } from "@prisma/client";
 import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs/promises";
@@ -6,8 +7,9 @@ import path from "path";
 import getConfig from "../../pages/api/unlighthouse.config";
 import { saveAnalysisToDB } from "../../lib/saveAnalysis";
 import { translate } from "./translate"; // Importa a função de tradução
-
 const execPromise = promisify(exec);
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -18,6 +20,16 @@ export default async function handler(req, res) {
 
   if (!siteUrl) {
     return res.status(400).json({ error: 'Parâmetro "siteUrl" é obrigatório' });
+  }
+
+  const site = await prisma.site.findUnique({
+    where: { url: siteUrl },
+  });
+
+  if (!site) {
+    return res
+      .status(404)
+      .json({ error: "Site não encontrado no banco de dados." });
   }
 
   // Define o diretório base de saída
@@ -55,6 +67,12 @@ export default async function handler(req, res) {
     // Lê o arquivo JSON gerado
     const fileData = await fs.readFile(jsonFilePath, "utf-8");
     const result = JSON.parse(fileData);
+
+    // console.log("Conteúdo do JSON gerado:", result);
+
+    if (!result || result.length === 0 || !result[0]) {
+      throw new Error("O resultado do Unlighthouse está vazio ou inválido.");
+    }
 
     // Remove o arquivo de configuração temporário
     await fs.unlink(tempConfigPath);
@@ -94,7 +112,15 @@ export default async function handler(req, res) {
       console.error("Erro ao ler o relatório bruto:", err);
       rawReport = null; // Define como nulo em caso de erro
     }
-
+    console.log("Dados extraídos da análise:", {
+      siteUrl,
+      score,
+      performance,
+      accessibility,
+      bestPractices,
+      seo,
+      rawReport,
+    });
     // Salvar no banco de dados utilizando a função modularizada
     const savedAnalysis = await saveAnalysisToDB({
       siteUrl,

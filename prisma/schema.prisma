@@ -14,18 +14,20 @@ generator client {
 }
 
 model SiteAnalysis {
-  id                Int      @id @default(autoincrement())
+  id                Int    @id @default(autoincrement())
+  siteId            Int
+  site              Site   @relation(fields: [siteId], references: [id])
+  siteUrl           String
   score             Float
   performance       Float
   accessibility     Float
   bestPractices     Float
   seo               Float
+  rawReport         Json?  // Relatório bruto
+  relatorioTraduzido Json? // Relatório traduzido
   dataAnalise       DateTime @default(now())
-  rawReport         Json?
-  relatorioTraduzido Json?
-  siteId            Int
-  site              Site     @relation(fields: [siteId], references: [id])
 }
+
 
 model Site {
   id       Int      @id @default(autoincrement())

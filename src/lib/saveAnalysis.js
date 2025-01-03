@@ -8,23 +8,36 @@ export async function saveAnalysisToDB(analysisData) {
     accessibility,
     bestPractices,
     seo,
-    rawReport, // Relatório bruto
-    relatorioTraduzido, // Relatório traduzido
+    rawReport,
+    relatorioTraduzido,
   } = analysisData;
+
+  console.log("Preparando para salvar análise:", {
+    siteUrl,
+    score,
+    performance,
+    accessibility,
+    bestPractices,
+    seo,
+    rawReport,
+    relatorioTraduzido,
+  });
 
   // Busca ou cria o site no banco de dados
   const site = await prisma.site.upsert({
     where: { url: siteUrl },
     update: {}, // Não atualiza nada se o site já existir
     create: {
-      nome: siteUrl, // Usa o URL como nome padrão (ajuste se necessário)
+      nome: "Site Desconhecido", // Defina um valor padrão ou obtenha de outra fonte
       url: siteUrl,
-      orgao: "Desconhecido", // Defina um valor padrão ou obtenha de outro lugar
+      orgao: "Desconhecido", // Valor padrão
       ativo: true,
     },
   });
 
-  // Salva a análise associada ao site encontrado ou criado
+  console.log("Site encontrado ou criado:", site);
+
+  // Salva a análise associada ao site
   const savedAnalysis = await prisma.siteAnalysis.create({
     data: {
       siteId: site.id, // Relaciona a análise ao site correto
@@ -35,10 +48,12 @@ export async function saveAnalysisToDB(analysisData) {
       bestPractices,
       seo,
       dataAnalise: new Date(),
-      rawReport: rawReport || null, // Salva o relatório bruto
-      relatorioTraduzido: relatorioTraduzido || null, // Salva o relatório traduzido
+      rawReport: rawReport || null,
+      relatorioTraduzido: relatorioTraduzido || null,
     },
   });
+
+  console.log("Análise salva no banco de dados:", savedAnalysis);
 
   return savedAnalysis;
 }
