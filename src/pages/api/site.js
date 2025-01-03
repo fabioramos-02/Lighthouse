@@ -39,16 +39,20 @@ async function handleGet(req, res) {
       return res.status(200).json(sites);
     }
   } catch (error) {
-    return res.status(500).json({ error: "Erro ao buscar sites.", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Erro ao buscar sites.", details: error.message });
   }
 }
 
 // POST: Cria um novo site
 async function handlePost(req, res) {
-  const { nome, url, orgao, ativo } = req.body;
+  const { nome, url, orgao, sigla, ativo } = req.body;
 
   if (!nome || !url || !orgao) {
-    return res.status(400).json({ error: "Campos 'nome', 'url' e 'orgao' são obrigatórios." });
+    return res
+      .status(400)
+      .json({ error: "Campos 'nome', 'url' e 'orgao' são obrigatórios." });
   }
 
   try {
@@ -57,13 +61,16 @@ async function handlePost(req, res) {
         nome,
         url,
         orgao,
+        sigla,
         ativo: ativo ?? true,
       },
     });
 
     return res.status(201).json(newSite);
   } catch (error) {
-    return res.status(500).json({ error: "Erro ao criar site.", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Erro ao criar site.", details: error.message });
   }
 }
 
@@ -79,12 +86,14 @@ async function handlePut(req, res) {
   try {
     const updatedSite = await prisma.site.update({
       where: { id: parseInt(id, 10) },
-      data: { nome, url, orgao, ativo },
+      data: { nome, url, orgao, sigla, ativo },
     });
 
     return res.status(200).json(updatedSite);
   } catch (error) {
-    return res.status(500).json({ error: "Erro ao atualizar site.", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Erro ao atualizar site.", details: error.message });
   }
 }
 
@@ -103,6 +112,8 @@ async function handleDelete(req, res) {
 
     return res.status(200).json({ message: "Site removido com sucesso." });
   } catch (error) {
-    return res.status(500).json({ error: "Erro ao remover site.", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Erro ao remover site.", details: error.message });
   }
 }
