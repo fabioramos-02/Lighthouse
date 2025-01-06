@@ -236,6 +236,6 @@ curl -X DELETE http://localhost:3000/api/usuario \
 ---
 
 ## **Contato**
-**Autor:** Fábio Ramos  
+**Autor:** Fabio Ramos  
 **E-mail:** [framos@segov.ms.gov.br](mailto:framos@segov.ms.gov.br)  
-**LinkedIn:** [Fábio Ramos](https://www.linkedin.com/in/fabio-ramos-7b8608204/)
+**LinkedIn:** [Fabio Ramos](https://www.linkedin.com/in/fabio-ramos-7b8608204/)
