@@ -9,7 +9,7 @@ export async function saveAnalysisToDB(analysisData) {
     bestPractices,
     seo,
     rawReport,
-    relatorioTraduzido,
+    relatorioTraduzido = null,
   } = analysisData;
 
 
